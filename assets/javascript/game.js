@@ -10,8 +10,8 @@ var audioDir = "assets/audio/";
 var audioExt = ".mp3";
 
 //filenames without extensions
-var correctGuessVideo = ["hit1", "hit2"];
-var wrongGuessVideo =  ["miss1","miss2"];
+var correctGuessVideo = ["hit1", "hit2", "hit3"];
+var wrongGuessVideo =  ["miss1","miss2", "miss3"];
 var winVideo = "win";
 var loseVideo = "lose";
 var titleScreenVideo = "titleScreen";
@@ -124,7 +124,7 @@ document.onkeyup = function(event){
 				}
 				else{
 					pauseAudio();
-					changeVideo("hit"+Math.ceil(Math.random()*2));
+					changeVideo("hit"+Math.ceil(Math.random()*correctGuessVideo.length));
 				}
 			}
 			
@@ -137,7 +137,7 @@ document.onkeyup = function(event){
 				}
 				else{
 					pauseAudio();
-					changeVideo("miss"+Math.ceil(Math.random()*2));
+					changeVideo("miss"+Math.ceil(Math.random()*wrongGuessVideo.length));
 				}
 
 
