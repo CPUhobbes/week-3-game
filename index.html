@@ -4,51 +4,41 @@
 		<title>Top Gun Hangman</title>
 		 <meta charset="UTF-8"> 
 
+		 <!-- CSS -->
 		<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
 		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
-
+		<!-- JavaScript -->
 		<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
-		 
-		 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		 <script src="assets/javascript/game.js"></script> 
-
-			
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="assets/javascript/game.js"></script> 
 	</head>
 	<body>
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12 text-center">
-					<img src="assets/images/Top_Gun_logo.png" width="550" height="175" alt="Top Gun Logo" class="imgMargin">
+					<img src="assets/images/Top_Gun_logo.png" width="550" alt="Top Gun Logo" class="imgMargin">
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-12 text-center">
-					<video id="Video1" width="500" height="240" class="videoMargin">
+				<div class="col-md-1"></div>
+				<div class="col-md-2 text-left">
+					<p class="scoreText">Wins</p>
+					<p class="scoreText" id="scoreWin"></p>
+				</div>
+				<div class="col-md-6 text-center">
+					<video id="Video1" width="500" height ="333" class="videoMargin">
 						<source id="videosrc" src="assets/video/titleScreen.mp4" type="video/mp4" >
 						Your browser does not support the video element.
 					</video>
 				</div>
+				<div class="col-md-2 text-right">
+					<p class="scoreText">Losses</p>
+					<p class="scoreText" id="scoreLose"></p>
+				</div>
+				<div class="col-md-1"></div>
+
 			</div>
 			<div class="row">
 				<div class="col-md-2"></div>
@@ -65,8 +55,7 @@
 				<div class="col-md-8" >
 					<div>
 						<p class="scoreboard" id="lettersGuessed">Letters Already Guessed: </p>
-						<p class="scoreboard" id="guessesRemaining">Number of Guesses Remaining: </p>
-						<p class="scoreboard" id="score"> Wins: <br />Losses: </p> 
+						<p class="scoreboard" id="guessesRemaining">Guesses Remaining: </p>
 					</div>
 				</div>
 				<div class="col-md-2" ></div>
@@ -82,20 +71,12 @@
 			</div>
 		</div>
 
-
-
-
-
-
-
-
-
 		<!-- Background Audio -->		
  		<audio id="audio1" loop src="assets/audio/topgun3.mp3" type="audio/mpeg">
  			 Your browser does not support the audio element.
 		</audio>
 
-		<!-- Modal setup for sound button-->
+		<!-- Modal setup for sound on/off menu -->
 		<div id="myModal" class="modal fade" role="dialog" data-backdrop="static">
 			<div class="modal-dialog">
 				<!-- Modal content-->

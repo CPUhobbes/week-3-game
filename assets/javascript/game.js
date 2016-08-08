@@ -8,6 +8,8 @@ var videoExt = ".mp4";
 var noAudioTag = "_noaudio";
 var audioDir = "assets/audio/";
 var audioExt = ".mp3";
+var acceptKeyPress = false;
+var videoPlaying = false;
 
 //filenames without extensions
 var correctGuessVideo = ["hit1", "hit2", "hit3"];
@@ -45,6 +47,7 @@ $(document).ready(function(){
 });
 function sound(selection){
 	soundEnabled = selection;
+	acceptKeyPress = true;
 	if (soundEnabled){
 		playAudio();
 	} 
@@ -65,10 +68,17 @@ function changeVideo(videoFile){
 	else {
 		source.src=videoDir+videoFile+noAudioTag+videoExt;
 	}
-	video.load();
-	video.play();
+	try {
+		video.pause();
+		video.load();
+		setTimeout(function() {video.play();}, 400); //Allows video to load and play without getting .play() errors
+	}
+	catch(e){
+		console.log(e);
+	}
 
 }
+
 //Checks to see if video is finished
 function myHandler(e) {  
 	if(enableStillScreen){
@@ -78,6 +88,7 @@ function myHandler(e) {
 		}
 	}
     enableStillScreen = false;
+    videoPlaying = false;
 }
 function pauseAudio(){
 	var audio = document.getElementById("audio1");
@@ -100,51 +111,50 @@ function changeAudio(audioFile){
  */   
 
 document.onkeyup = function(event){
-	var keyPress = String.fromCharCode(event.keyCode).toUpperCase();
-	if (keyPress && start) {
-		start=false;
-		startGame();
-	}
-	else{
-		if(keyPress.length === 1 && keyPress.match(/[a-z]/i)&& alreadyGuessed(keyPress) && !endGame){
-			document.getElementById("lettersGuessed").innerHTML+=" "+keyPress;
-			guessArray.push(keyPress);
-			
+	if(acceptKeyPress){
 
-			if(word.indexOf(keyPress) > -1){
-				for(var i=0;i<word.length;++i){
-					if(word.charAt(i) == keyPress){
-						document.getElementById("letterID_"+i).innerHTML=keyPress;
-						correctGuesses+=1;
+		var keyPress = String.fromCharCode(event.keyCode).toUpperCase();
+		if (keyPress && start) {
+			start=false;
+			startGame();
+		}
+		else{
+			if(keyPress.length === 1 && keyPress.match(/[a-z]/i)&& alreadyGuessed(keyPress) && !endGame){
+				document.getElementById("lettersGuessed").innerHTML+=" "+keyPress;
+				guessArray.push(keyPress);
+				
+
+				if(word.indexOf(keyPress) > -1){
+					for(var i=0;i<word.length;++i){
+						if(word.charAt(i) == keyPress){
+							document.getElementById("letterID_"+i).innerHTML=keyPress;
+							correctGuesses+=1;
+						}
+					}
+					
+					if(correctGuesses == word.length){
+						endgame(true);
+					}
+					else{
+						pauseAudio();
+						changeVideo("hit"+Math.ceil(Math.random()*correctGuessVideo.length));
 					}
 				}
 				
-				if(correctGuesses == word.length){
-					endgame(true);
-				}
 				else{
-					pauseAudio();
-					changeVideo("hit"+Math.ceil(Math.random()*correctGuessVideo.length));
+					numGuesses-=1;
+					document.getElementById("guessesRemaining").innerHTML="Number of Guesses Remaining: "+numGuesses;
+					if(numGuesses == 0){
+						endgame(false);
+					}
+					else{
+						pauseAudio();
+						changeVideo("miss"+Math.ceil(Math.random()*wrongGuessVideo.length));
+					}
 				}
-			}
-			
-
-			else{
-				numGuesses-=1;
-				document.getElementById("guessesRemaining").innerHTML="Number of Guesses Remaining: "+numGuesses;
-				if(numGuesses == 0){
-					endgame(false);
-				}
-				else{
-					pauseAudio();
-					changeVideo("miss"+Math.ceil(Math.random()*wrongGuessVideo.length));
-				}
-
-
 			}
 		}
 	}
-
 }
 
 
@@ -159,10 +169,10 @@ function startGame(){
 	correctGuesses=0;
 	guessArray = new Array();
 	document.getElementById("letterBox").innerHTML=generateWordBox(word.length);
-	document.getElementById("guessesRemaining").innerHTML="Number of Guesses Remaining: "+numGuesses;
-	document.getElementById("score").innerHTML="Wins: "+wins+"<br />Losses: "+loses;
+	document.getElementById("guessesRemaining").innerHTML="Guesses Remaining: "+numGuesses;
 	document.getElementById("lettersGuessed").innerHTML="Letters Already Guessed: ";
 	document.getElementById("playAgain").style.visibility="hidden";
+	writeScore();
 	endGame = false;
 }
 function generateWordBox(numTimes){
@@ -191,6 +201,7 @@ function endgame(win){
 		changeVideo("win");
 		document.getElementById("playAgain").className = "btn btn-default btn-success resetGame";
 		document.getElementById("playAgain").innerHTML ="You Won! Play Again?";
+		document.getElementById("scoreWin").innerHTML=wins;
 
 	}
 	else{
@@ -199,15 +210,17 @@ function endgame(win){
 		changeVideo("lose");
 		document.getElementById("playAgain").className = "btn btn-default btn-danger resetGame";
 		document.getElementById("playAgain").innerHTML ="You Lost! Play Again?";
+		
 		for(var i=0;i<word.length;++i){
 
 			document.getElementById("letterID_"+i).innerHTML=word[i];
 		}
-
-
-
 	}
-	document.getElementById("score").innerHTML="Wins: "+wins+"<br />Losses: "+loses;
+	writeScore();
 	document.getElementById("playAgain").style.visibility="visible";
 	endGame = true;
+}
+function writeScore(){
+	document.getElementById("scoreWin").innerHTML=wins;
+	document.getElementById("scoreLose").innerHTML=loses;
 }
