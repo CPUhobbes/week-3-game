@@ -24,7 +24,7 @@ var audioList = ["topgun1", "topgun2","topgun3","topgun4"];
 var start=true;
 var word ="";
 var dictionary = ["STABILIZER", "TURBINE", "COCKPIT", "MISSILE", "TOMCAT", "MAVERICK", "GOOSE", "ICEMAN", 
-				  "VOLLEYBALL", "MOTORCYCLE", "HELICOPTER", "CARRIER", "BANDIT", "BOGEY"];
+				  "VOLLEYBALL", "MOTORCYCLE", "HELICOPTER", "CARRIER", "BANDIT", "BOGEY", "CHARLIE", "SIDEWINDER"];
 var numGuesses;
 var correctGuesses;
 var guessArray;
