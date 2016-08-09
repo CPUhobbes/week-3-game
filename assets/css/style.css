@@ -70,10 +70,15 @@ body {
 	color: white;
 	font-size: 28px;
 }
+.buttonMargin{
+	margin-top: 10px;
+}
+
 video{
     margin:0;
     padding:0;
 }
+
 @media(max-width: 1199px){
 	.videoMargin{
 		width: 450px;

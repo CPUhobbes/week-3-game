@@ -20,7 +20,7 @@ var titleScreenVideo = "titleScreen";
 var startVideo = "start";
 var audioList = ["topgun1", "topgun2","topgun3","topgun4"];
 
-//Game Mechanics
+//Game Mechanics variables
 var start=true;
 var word ="";
 var dictionary = ["STABILIZER", "TURBINE", "COCKPIT", "MISSILE", "TOMCAT", "MAVERICK", "GOOSE", "ICEMAN", 
@@ -31,20 +31,24 @@ var guessArray;
 var wins = 0;
 var loses = 0;
 var endGame;
+
 /*
  *Load sound button and video on start
  */
 $(document).ready(function(){
-		$("#myModal").modal('show');
-		document.getElementById('Video1').addEventListener('ended',myHandler,false);
 
-		//Set startup video here so if video changes above no need to edit html
-		document.getElementById('videosrc').src=videoDir+titleScreenVideo+videoExt;
-		document.getElementById("Video1").load();
-		randomAudio = Math.ceil(Math.random()*4)-1;
+		//modal sound menu
+		$("#myModal").modal('show');
+
+		//video ends, show title still screen
+		$("#Video1").on('ended',myHandler);
+
+		randomAudio = Math.ceil(Math.random()*4)-1;  //random song selection
 		changeAudio(randomAudio);
 
 });
+
+//Play sound if option is selected
 function sound(selection){
 	soundEnabled = selection;
 	acceptKeyPress = true;
@@ -56,17 +60,19 @@ function sound(selection){
 
 /*
  *Video and Audio Controls
+ *
+ * Did not use JQuery for video/audio controls as there may be performance issues
  */
 
 function changeVideo(videoFile){
 	enableStillScreen = true;
-	var video = document.getElementById("Video1");
-	var source = document.getElementById('videosrc');
+	var video = document.getElementById("Video1");  
 	if(soundEnabled){
-		source.src=videoDir+videoFile+videoExt;
+		
+		$("#videosrc").attr("src", videoDir+videoFile+videoExt);
 	}
 	else {
-		source.src=videoDir+videoFile+noAudioTag+videoExt;
+		$("#videosrc").attr("src", videoDir+videoFile+noAudioTag+videoExt);
 	}
 	try {
 		video.pause();
@@ -90,6 +96,7 @@ function myHandler(e) {
     enableStillScreen = false;
     videoPlaying = false;
 }
+
 function pauseAudio(){
 	var audio = document.getElementById("audio1");
 	audio.pause();
@@ -99,9 +106,7 @@ function playAudio(){
 	audio.play();
 }
 function changeAudio(audioFile){
-	var audio = document.getElementById("audio1");
-	var audioSource = document.getElementById('videosrc');
-	audio.src=audioDir+audioList[audioFile]+audioExt;
+	$("#audio1").attr("src", audioDir+audioList[audioFile]+audioExt);
 
 }
 
@@ -111,23 +116,32 @@ function changeAudio(audioFile){
  */   
 
 document.onkeyup = function(event){
-	if(acceptKeyPress){
-
+	
+	//Waits for sound selection before allowing key presses
+	if(acceptKeyPress){ 
 		var keyPress = String.fromCharCode(event.keyCode).toUpperCase();
-		if (keyPress && start) {
+
+		//verifies that the game hasn't been started previously
+		if (keyPress && start) { 
 			start=false;
 			startGame();
 		}
 		else{
-			if(keyPress.length === 1 && keyPress.match(/[a-z]/i)&& alreadyGuessed(keyPress) && !endGame){
-				document.getElementById("lettersGuessed").innerHTML+=" "+keyPress;
-				guessArray.push(keyPress);
-				
 
-				if(word.indexOf(keyPress) > -1){
-					for(var i=0;i<word.length;++i){
+			/*
+			 *	verifies that only 1 char has been pressed, matches regex (only letters beccause that is how 
+			 	hangman should be played), letter hasn't been guessed, and the game isn't over
+			 *
+			 */
+			if(keyPress.length === 1 && keyPress.match(/[a-z]/i)&& alreadyGuessed(keyPress) && !endGame){
+				$("#lettersGuessed").append(" "+keyPress);
+				guessArray.push(keyPress);		//add guessed letter to array so letter will not be guessed again
+				
+				//check to see if letter is in word
+				if(word.indexOf(keyPress) > -1){ 
+					for(var i=0;i<word.length;++i){ 
 						if(word.charAt(i) == keyPress){
-							document.getElementById("letterID_"+i).innerHTML=keyPress;
+							$("#letterID_"+i).html(keyPress);
 							correctGuesses+=1;
 						}
 					}
@@ -137,19 +151,20 @@ document.onkeyup = function(event){
 					}
 					else{
 						pauseAudio();
-						changeVideo("hit"+Math.ceil(Math.random()*correctGuessVideo.length));
+						changeVideo("hit"+Math.ceil(Math.random()*correctGuessVideo.length)); 	//random correct video
 					}
 				}
 				
 				else{
+					//Reduce number of guesses and check to see if end of game
 					numGuesses-=1;
-					document.getElementById("guessesRemaining").innerHTML="Number of Guesses Remaining: "+numGuesses;
+					$("#guessesRemaining").html("Number of Guesses Remaining: "+numGuesses);
 					if(numGuesses == 0){
 						endgame(false);
 					}
 					else{
-						pauseAudio();
-						changeVideo("miss"+Math.ceil(Math.random()*wrongGuessVideo.length));
+						pauseAudio(); 
+						changeVideo("miss"+Math.ceil(Math.random()*wrongGuessVideo.length)); // random miss video
 					}
 				}
 			}
@@ -157,24 +172,25 @@ document.onkeyup = function(event){
 	}
 }
 
-
-function startGame(){
-
+//Starting conditions for game
+function startGame(){	
 	var audio = document.getElementById("audio1");
 	audio.pause();
 	changeVideo("start");
-	randomWordNum = Math.ceil(Math.random()*dictionary.length);
+	randomWordNum = Math.ceil(Math.random()*dictionary.length); //random word from dictionary is selected
 	word = dictionary[randomWordNum-1];
 	numGuesses = 7;
 	correctGuesses=0;
 	guessArray = new Array();
-	document.getElementById("letterBox").innerHTML=generateWordBox(word.length);
-	document.getElementById("guessesRemaining").innerHTML="Guesses Remaining: "+numGuesses;
-	document.getElementById("lettersGuessed").innerHTML="Letters Already Guessed: ";
-	document.getElementById("playAgain").style.visibility="hidden";
+	$("#letterBox").html(generateWordBox(word.length));
+	$("#guessesRemaining").html("Guesses Remaining: "+numGuesses);
+	$("#lettersGuessed").html("Letters Already Guessed: ");
+	$("#playAgain").css("visibility","hidden");
 	writeScore();
 	endGame = false;
 }
+
+//Generate <div>'s based on number of letters in word
 function generateWordBox(numTimes){
 	var output= "";
 	for(var i = 0; i< numTimes; ++i){
@@ -182,45 +198,44 @@ function generateWordBox(numTimes){
 
 	}
 	return output;
-
 }
 
+//check array to see if letter has been guessed
 function alreadyGuessed(letterCheck){
 	if(guessArray.indexOf(letterCheck)>-1)
 		return false;
 	else
 		return true;
-
-
 }
 
+//End game scenerios
 function endgame(win){
 	if(win){
 		wins+=1;
 		pauseAudio();
 		changeVideo("win");
-		document.getElementById("playAgain").className = "btn btn-default btn-success resetGame";
-		document.getElementById("playAgain").innerHTML ="You Won! Play Again?";
-		document.getElementById("scoreWin").innerHTML=wins;
-
+		$("#playAgain").attr("class", "btn btn-default btn-success resetGame buttonMargin");
+		$("#playAgain").html("You Won! Play Again?");
 	}
 	else{
 		loses+=1;
 		pauseAudio();
 		changeVideo("lose");
-		document.getElementById("playAgain").className = "btn btn-default btn-danger resetGame";
-		document.getElementById("playAgain").innerHTML ="You Lost! Play Again?";
+		$("#playAgain").attr("class", "btn btn-default btn-danger resetGame buttonMargin");
+		$("#playAgain").html("You Lost! Play Again?");
 		
-		for(var i=0;i<word.length;++i){
+		//Show word
+		for(var i=0;i<word.length;++i){ 
 
-			document.getElementById("letterID_"+i).innerHTML=word[i];
+			$("#letterID_"+i).html(word[i]);
 		}
 	}
 	writeScore();
-	document.getElementById("playAgain").style.visibility="visible";
+	$("#playAgain").css("visibility","visible");
 	endGame = true;
 }
+
 function writeScore(){
-	document.getElementById("scoreWin").innerHTML=wins;
-	document.getElementById("scoreLose").innerHTML=loses;
+	$("#scoreWin").html(wins);
+	$("#scoreLose").html(loses);
 }
