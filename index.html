@@ -18,6 +18,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
+		<img class="jet" src="assets/images/jet.png" height="100" width="300" alt="F14">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12 text-center">
@@ -28,7 +29,7 @@
 				<div class="col-md-1"></div>
 				<div class="col-md-2 text-left">
 					<div class =" panel panel-default ">
-						<div class = "panel-body panelMod">
+						<div class = "panel-body panelMod sidepanel">
 							<p class="scoreText">Wins</p>
 							<p class="scoreText" id="scoreWin"></p>
 						</div>
@@ -42,40 +43,43 @@
 				</div>
 				<div class="col-md-2 text-right">
 					<div class =" panel panel-default ">
-						<div class = "panel-body panelMod">
+						<div class = "panel-body panelMod sidepanel">
 							<p class="scoreText">Losses</p>
 							<p class="scoreText" id="scoreLose"></p>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-1"></div>
-
 			</div>
 			<div class="row">
 				<div class="col-md-2"></div>
-				<div class="col-md-8 text-center" >
-					<div class = "letterHolder" id="letterBox">
-						<p class="introText">Do you feel the need, the need for speed?<br />
-						Help Maverick take out those MiG fighters, press any key to start!</p>
+					<div class="col-md-8 text-center" >
+						<div class =" panel panel-default ">
+							<div class = "panel-body panelMod letterHolder" id="letterBox">
+								<p class="introText">Do you feel the need, the need for speed?<br />
+									Help Maverick take out those MiG fighters, press any key to start!</p>
+							</div>
+						</div>
 					</div>
-				</div>
 				<div class="col-md-2" ></div>
 			</div>
 			<div class="row">
 				<div class="col-md-2"></div>
-				<div class="col-md-8" >
-					<div>
-						<p class="scoreboard" id="lettersGuessed">Letters Already Guessed: </p>
-						<p class="scoreboard" id="guessesRemaining">Guesses Remaining: </p>
+					<div class="col-md-8" >
+						<div class =" panel panel-default">
+							<div class = "panel-body panelMod gameCounter">
+								<div class="scoreboard">Letters Already Guessed: </div><div class="blueText" id="lettersGuessed"></div>
+								<div class="scoreboard">Guesses Remaining: </div><div class="blueText" id="guessesRemaining"></div>
+							</div>
+						</div>
 					</div>
-				</div>
 				<div class="col-md-2" ></div>
 			</div>
-			<div class="row">
+			<div class="row noShow">
 				<div class="col-md-2"></div>
 				<div class="col-md-8 text-center" >
 					<div>
-						<button type="button" class="btn btn-default btn-danger resetGame buttonMargin" id="playAgain" onClick="startGame()">Play Again?</button>
+						<button type="button" class="btn btn-default btn-danger buttonMargin" id="playAgain" onClick="startGame()">Play Again?</button>
 					</div>
 				</div>
 				<div class="col-md-2" ></div>
@@ -83,7 +87,7 @@
 		</div>
 
 		<!-- Background Audio -->		
- 		<audio id="audio1" loop src="assets/audio/topgun3.mp3" type="audio/mpeg">
+ 		<audio id="audio1" loop src="assets/audio/topgun3.mp3">
  			 Your browser does not support the audio element.
 		</audio>
 
@@ -108,5 +112,6 @@
 				</div>
 			</div>
 		</div>
+
 	</body>
 </html>

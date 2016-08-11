@@ -1,22 +1,20 @@
 body {
 	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-	height: 100%;
-	margin: 0 0 100px;
-	background-color: #000066;
+	height:100%;
+
 	font-size: 16px;
 	font-weight: bold;
+	background-color: #000066;
+	background-image: url("../images/clouds.jpg");
+    overflow-x: hidden;
 
 }
 
 .letterHolder{
 	width: 100%;
-  	height: 70px;
-  	border: solid 3px #CC0900;
   	display:inline-block;
 	text-align: center;
-	padding: 0 20px;
-	background-color: #ffffff;
-	border-radius: 6px;
+	
 }
 
 .letter{
@@ -41,7 +39,7 @@ body {
 	color: #CC0900;
 	font-size: 16px;
 	font-weight: bold;
-	margin-top: 10px;
+	margin: 0px;
 
 }
 
@@ -57,12 +55,11 @@ body {
 }
 
 .scoreboard{
-	margin-top: 20px;
-	color: #ffffff;
+	clear:both;
+	float: left;
+	margin-top: 0px;
+	color: #CC0900;
 
-}
-.resetGame{
-	visibility: hidden;
 }
 
 .scoreText{
@@ -72,10 +69,12 @@ body {
 }
 .buttonMargin{
 	margin-top: 10px;
+	display: none;
 }
-.panel-default, .panel, .panel-heading {
+.panel-default, .panel, .panel-heading{
   border: solid 1px #CC0900;
   box-shadow: none;
+  background-color: rgba(255,255,255,.5);
 }
 
 video{
@@ -83,10 +82,22 @@ video{
     padding:0;
 }
 .panelMod{
-	background-color: rgba(255,255,255,0.5);
-	height: 300px;
 	border: solid 3px #CC0900;
 	box-shadow: none;
+}
+.sidepanel {
+	height: 320px;
+
+}
+.blueText{
+	float: left;
+color: #000066;
+
+}
+.jet{
+	position: absolute;
+	z-index: -10;
+	display: none;
 }
 
 @media(max-width: 1199px){
@@ -94,5 +105,17 @@ video{
 		width: 450px;
  		height: 300px;
 
+	}
+}
+@media(max-width: 991px){
+	.videoMargin{
+		width: 550px;
+ 		height: 400px;
+
+	}
+	.sidepanel{
+		height:120px;
+		margin: 0;
+		padding: 0;
 	}
 }

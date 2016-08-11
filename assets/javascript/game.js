@@ -46,6 +46,8 @@ $(document).ready(function(){
 		randomAudio = Math.ceil(Math.random()*4)-1;  //random song selection
 		changeAudio(randomAudio);
 
+		animateJet();
+
 });
 
 //Play sound if option is selected
@@ -158,7 +160,7 @@ document.onkeyup = function(event){
 				else{
 					//Reduce number of guesses and check to see if end of game
 					numGuesses-=1;
-					$("#guessesRemaining").html("Number of Guesses Remaining: "+numGuesses);
+					$("#guessesRemaining").html(numGuesses);
 					if(numGuesses == 0){
 						endgame(false);
 					}
@@ -183,9 +185,7 @@ function startGame(){
 	correctGuesses=0;
 	guessArray = new Array();
 	$("#letterBox").html(generateWordBox(word.length));
-	$("#guessesRemaining").html("Guesses Remaining: "+numGuesses);
-	$("#lettersGuessed").html("Letters Already Guessed: ");
-	$("#playAgain").css("visibility","hidden");
+	$("#guessesRemaining").html(numGuesses);
 	writeScore();
 	endGame = false;
 }
@@ -231,11 +231,37 @@ function endgame(win){
 		}
 	}
 	writeScore();
-	$("#playAgain").css("visibility","visible");
+	$(".buttonMargin").css({"display": "initial"});
 	endGame = true;
 }
 
 function writeScore(){
 	$("#scoreWin").html(wins);
 	$("#scoreLose").html(loses);
+}
+
+function animateJet(){
+setTimeout(function() {
+	 $(".jet").css({"display": "initial"});
+    var xPos = $( document ).width();
+    var yPos = $( document ).height();
+    if(Math.round(Math.random()) == 1){
+        $(".jet").css({"-moz-transform": "scale(1, 1)", "-webkit-transform": "scale(1, 1)","transform": "scale(1, 1)"});
+        $(".jet").css({top: yPos*Math.random(), left: xPos});
+        $( ".jet" ).animate(
+                        {left: "0"-$(".jet").width()},
+                        7000,
+                        animateJet);
+	}   
+	else{
+        $(".jet").css({"-moz-transform": "scale(-1, 1)", "-webkit-transform": "scale(-1, 1)","transform": "scale(-1, 1)"});
+        $(".jet").css({top: yPos*Math.random(), left: 0-$(".jet").width()});
+        $( ".jet" ).animate(
+                        {left: xPos},
+                        7000,
+                        animateJet);
+}
+
+}, 2000);
+
 }
