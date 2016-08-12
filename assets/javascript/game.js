@@ -184,9 +184,11 @@ function startGame(){
 	numGuesses = 7;
 	correctGuesses=0;
 	guessArray = new Array();
+	$("#lettersGuessed").empty();
 	$("#letterBox").html(generateWordBox(word.length));
 	$("#guessesRemaining").html(numGuesses);
 	writeScore();
+	$(".buttonControl").css({"visibility": "hidden"});
 	endGame = false;
 }
 
@@ -214,14 +216,14 @@ function endgame(win){
 		wins+=1;
 		pauseAudio();
 		changeVideo("win");
-		$("#playAgain").attr("class", "btn btn-default btn-success resetGame buttonMargin");
+		$("#playAgain").attr("class", "btn btn-default btn-success buttonControl");
 		$("#playAgain").html("You Won! Play Again?");
 	}
 	else{
 		loses+=1;
 		pauseAudio();
 		changeVideo("lose");
-		$("#playAgain").attr("class", "btn btn-default btn-danger resetGame buttonMargin");
+		$("#playAgain").attr("class", "btn btn-default btn-danger buttonControl");
 		$("#playAgain").html("You Lost! Play Again?");
 		
 		//Show word
@@ -231,7 +233,7 @@ function endgame(win){
 		}
 	}
 	writeScore();
-	$(".buttonMargin").css({"display": "initial"});
+	$(".buttonControl").css({"visibility": "visible"});
 	endGame = true;
 }
 
@@ -241,27 +243,44 @@ function writeScore(){
 }
 
 function animateJet(){
-setTimeout(function() {
-	 $(".jet").css({"display": "initial"});
-    var xPos = $( document ).width();
-    var yPos = $( document ).height();
-    if(Math.round(Math.random()) == 1){
-        $(".jet").css({"-moz-transform": "scale(1, 1)", "-webkit-transform": "scale(1, 1)","transform": "scale(1, 1)"});
-        $(".jet").css({top: yPos*Math.random(), left: xPos});
-        $( ".jet" ).animate(
-                        {left: "0"-$(".jet").width()},
-                        7000,
-                        animateJet);
-	}   
-	else{
-        $(".jet").css({"-moz-transform": "scale(-1, 1)", "-webkit-transform": "scale(-1, 1)","transform": "scale(-1, 1)"});
-        $(".jet").css({top: yPos*Math.random(), left: 0-$(".jet").width()});
-        $( ".jet" ).animate(
-                        {left: xPos},
-                        7000,
-                        animateJet);
-}
+	setTimeout(function() {
+		$(".jet").css({"display": "initial"});
+	    var xPos = $( document ).width();
+	    var yPos = $( document ).height();
 
-}, 2000);
+	   	var jetYPos = yPos*Math.random();
+
+	   	//Prevent Jet image from being off screen during animation (#25 is a spacer from window)
+	   	if(jetYPos<$(".jet").height()){
+	   		jetYPos = $(".jet").height()+25;
+	   	}
+	   	else if(jetYPos>yPos-$(".jet").height()){
+	   		jetYPos=yPos - $(".jet").height()-25;
+	   	}
+
+	   	//Animate Jet left to right
+	    if(Math.round(Math.random()) == 1){
+	    	//Flip image in direction of travel
+	        $(".jet").css({"-moz-transform": "scale(1, 1)", "-webkit-transform": "scale(1, 1)","transform": "scale(1, 1)"});
+	        
+	        $(".jet").css({top: jetYPos, left: xPos});
+	        $( ".jet" ).animate(
+	                        {left: "0"-$(".jet").width()},
+	                        7000,
+	                        animateJet);
+		}   
+		//Animate Jet Righ to left
+		else{
+			//Flip image in direction of travel
+	        $(".jet").css({"-moz-transform": "scale(-1, 1)", "-webkit-transform": "scale(-1, 1)","transform": "scale(-1, 1)"});
+
+	        $(".jet").css({top: jetYPos, left: 0-$(".jet").width()});
+	        $( ".jet" ).animate(
+	                        {left: xPos},
+	                        7000,
+	                        animateJet);
+		}
+	//Animation Time
+	}, 2000);
 
 }
